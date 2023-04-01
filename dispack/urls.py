@@ -27,4 +27,5 @@ urlpatterns = [
     path('', include('blog.urls')),
     path('', include('paypalpayapp.urls')),
     path('',include('contact.urls')),
+    path('dashboard/', include('superuser.urls')),
 ]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

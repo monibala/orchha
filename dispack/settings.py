@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'blog',
     'paypalpayapp',
     'contact',
+    'superuser',
+    
 ]
 
 MIDDLEWARE = [
