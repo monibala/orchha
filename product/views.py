@@ -123,7 +123,7 @@ def products(request):
     # return render(request, 'checkout.html', {'amount':amount,'customer':customer,'totalamount':totalamount, 'cart_item':cart_item})
 from twilio.rest import Client
 TWILIO_ACCOUNT_SID = 'AC7f2e383f0e9ba57d9d1890eb8738aef7'
-TWILIO_AUTH_TOKEN = 'ac94fa76bfee0c2b7c587a9cae3ecaf3'
+TWILIO_AUTH_TOKEN = '4470c8721c6c434ee43ffd6316edc951'
 def checkout(request):
     if request.user.is_authenticated:
         user = request.user
@@ -142,16 +142,23 @@ def checkout(request):
             upt = update_order(user = user, name=name,email=email,mobile=mobile,address=address,state=state,city=city)
             # print(check)
             upt.save()
-            # upt = update_order(user=user,name=name,email=email,mobile=mobile,address=address,city=city,state=state)
-            # upt.save()
-            # Whatsaap
-            client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-            message = client.messages.create(
-            from_='whatsapp:+14155238886',
-            body='Hi user...Your {} order of {} has shipped and should be delivered on {}. Details: {}',
-            to='whatsapp:+{}'.format(mobile)
-        )
-
+        #     od = OrderItem()
+        #     address=upt.address
+        #     amount = od.total_amount
+        #     date = 'within 3- 4 days'
+        #     order_detail = {
+        #         amount:'amount',
+        #         address:'address',
+        #         date:'date'
+        #     }
+        #     # Whatsaap
+        #     client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+        #     message = client.messages.create(
+        #     from_='whatsapp:+14155238886',
+        #     body='Hi user...Your {} order of has shipped and should be delivered on {}. Details: {}'.format(order_detail['amount'],order_detail['date'],order_detail['address']),
+        #     to='whatsapp:+{}'.format(mobile)
+        # )
+        #     print(message.sid)
         customer = Customer_info.objects.filter(email=user.email)
         # customer_name = Customer_info.objects.get(user=user)
         print(customer)
@@ -167,7 +174,7 @@ def checkout(request):
                 cost = (p.quantity * p.product.offer_price)
                 amount += cost
                 # order = OrderItem(user=user,name=customer.name,email=customer_name.email,mobile=customer_name.mobile,address=customer_name.apartmentname,city=customer_name.city,state=customer_name.state,order_id=uuid.uuid4(),product=p.product,quntity=p.quantity)        
-                order = OrderItem(user=user,order_id=uuid.uuid4(),product=p.product,quntity=p.quantity,code=p.code,size=p.size,color=p.color)
+                order = OrderItem(user=user,order_id=uuid.uuid4(),product=p.product,quntity=p.quantity)
                 order.save()
             totalamount = amount + shipping_amount
             # order = OrderItem(user=user,name=customer_name.name,email=customer_name.email,mobile=customer_name.mobile,address=customer_name.apartmentname,city=customer_name.city,state=customer_name.state,amount=totalamount,order_id=uuid.uuid4(),product=p.product,quntity=p.quantity)        
@@ -188,8 +195,8 @@ def checkout(request):
         messages.warning(request,'Please Login Or Register.')
         return redirect('login_user')
 from twilio.rest import Client
-TWILIO_ACCOUNT_SID = 'AC7f2e383f0e9ba57d9d1890eb8738aef7'
-TWILIO_AUTH_TOKEN = 'ac94fa76bfee0c2b7c587a9cae3ecaf3'
+# TWILIO_ACCOUNT_SID = 'AC7f2e383f0e9ba57d9d1890eb8738aef7'
+# TWILIO_AUTH_TOKEN = 'ac94fa76bfee0c2b7c587a9cae3ecaf3'
 def send_notification(request):
     today = datetime.date.today()
     print(today)
@@ -272,7 +279,7 @@ def cart(request):
         if item_already_in_cart:
             return redirect('show_cart')
         else:
-            Cart(user=user,product=prod,quantity=quantity,code=prod.code,color=prod.color,size=prod.size).save()
+            Cart(user=user,product=prod,quantity=quantity).save()
            
         return redirect('show_cart')
     else:
